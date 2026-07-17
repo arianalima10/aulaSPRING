@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +19,9 @@ import br.com.arianalima.helloworld.model.Produto;
 
 @RestController
 public class ProdutoController {
-	
+
 	public ArrayList<Produto> database;
-	
+
 	public ProdutoController() {
 		database = new ArrayList<>() {{
 			add(new Produto(1, "Computador", 1500.0));
@@ -30,52 +31,54 @@ public class ProdutoController {
 			add(new Produto(5, "Impressora", 350.0));
 		}};
 	}
-	
+
 	@GetMapping("/produtos")
 	public ArrayList<Produto> recuperarTodos(){
 		return database;
 	}
-	
-	@GetMapping("/produtos/sort")
-	public List<Produto> recupararOrdenado(@RequestParam(name="order", required = false) String order) {
-		System.out.println("order = " + order);
 
+	@GetMapping("/produtos/sort")
+	public ResponseEntity<List<Produto>> recupararOrdenado(@RequestParam(name="order", required = false) String order) {
 		if (order == null) {
-			return database;
+			return ResponseEntity.ok(database);
 		} else if (order.equals("asc")) {
-			return database.stream().sorted(Comparator.comparing(Produto::getPreco)).toList();
+			return ResponseEntity.ok(database.stream().sorted(Comparator.comparing(Produto::getPreco)).toList());
 		} else if (order.equals("desc")) {
-			return database.stream().sorted(Comparator.comparing(Produto::getPreco).reversed()).toList();
+			return ResponseEntity.ok(database.stream().sorted(Comparator.comparing(Produto::getPreco).reversed()).toList());
 		} else
-			return null;
+			return ResponseEntity.status(400).build();
 	}
-	
+
 	@GetMapping("/produtos/{id}")
-	public Produto recuperarPeloId(@PathVariable int id) {
-		return database.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+	public ResponseEntity<Produto> recuperarPeloId(@PathVariable int id) {
+		Produto prod = database.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+		if(prod != null) {
+			return ResponseEntity.ok(prod);
+		}
+		return ResponseEntity.notFound().build();
 	}
-	
+
 	@PostMapping("/produtos")
-	public Produto adicionarProduto(@RequestBody Produto novo) {
+	public ResponseEntity<Produto> adicionarProduto(@RequestBody Produto novo) {
 		database.add(novo);
-		return novo;
+		return ResponseEntity.ok(novo);
 	}
-	
+
 	@PutMapping("/produtos/{id}")
-	public Produto alterarDados(@PathVariable int id, @RequestBody Produto produto) {
+	public ResponseEntity<Produto> alterarDados(@PathVariable int id, @RequestBody Produto produto) {
 		int posicao = IntStream.range(0, database.size())
 							   .filter(i -> database.get(i).getId() == id)
 							   .findFirst()
 							   .orElse(-1);
 		if(posicao >= 0) {
 			database.set(posicao, produto);
-			return produto;
+			return ResponseEntity.ok(produto);
 		}
-		return null;
+		return ResponseEntity.notFound().build();
 	}
-	
+
 	@DeleteMapping("/produtos/{id}")
-	public Produto apagarDados(@PathVariable int id) {
+	public ResponseEntity<Produto> apagarDados(@PathVariable int id) {
 		int posicao = IntStream.range(0, database.size())
 							   .filter(i -> database.get(i).getId() == id)
 							   .findFirst()
@@ -83,23 +86,8 @@ public class ProdutoController {
 		if(posicao >= 0) {
 			Produto tmp = database.get(posicao);
 			database.remove(posicao);
-			return tmp;
+			return ResponseEntity.ok(tmp);
 		}
-		return null;
+		return ResponseEntity.notFound().build();
 	}
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
