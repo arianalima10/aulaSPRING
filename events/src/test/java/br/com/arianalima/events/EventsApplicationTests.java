@@ -1,4 +1,4 @@
-package events;
+package br.com.arianalima.events;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,5 +9,4 @@ class EventsApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

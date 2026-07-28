@@ -1,4 +1,4 @@
-package model;
+package br.com.arianalima.events.model;
 
 import java.time.LocalDateTime;
 

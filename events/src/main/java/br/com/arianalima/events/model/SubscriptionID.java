@@ -1,4 +1,4 @@
-package model;
+package br.com.arianalima.events.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 public class SubscriptionID {
 
 	@ManyToOne
-	@JoinColumn(name = "subscribed_user_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	@ManyToOne

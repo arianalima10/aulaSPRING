@@ -1,4 +1,4 @@
-package model;
+package br.com.arianalima.events.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,12 +8,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "tbl_conference")
 public class Conference {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_conference")
+	@Column(name = "conference_id")
 	private Integer id;
 
 	@Column(name = "name", length = 100, nullable = false)

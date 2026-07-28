@@ -1,4 +1,4 @@
-package model;
+package br.com.arianalima.events.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -30,7 +31,7 @@ public class Session {
 	private LocalTime startTime;
 
 	@ManyToOne
-	@Column(name = "tbl_conference_id_conference")
+	@JoinColumn(name = "tbl_conference_id_conference")
 	private Conference conference;
 
 	public Integer getIdSession() {
@@ -71,5 +72,11 @@ public class Session {
 
 	public void setConference(Conference conference) {
 		this.conference = conference;
+	}
+
+	@Override
+	public String toString() {
+		return "Session [idSession=" + idSession + ", title=" + title + ", startDate=" + startDate + ", startTime="
+				+ startTime + ", conference=" + conference + "]";
 	}
 }
